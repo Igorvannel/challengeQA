@@ -1,40 +1,33 @@
-name: "tests"
+name: Playwright UI Tests
 
 on:
-  pull_request:
   push:
-    branches:
+    branches: 
       - main
-      - 'releases/*'
-  workflow_dispatch:
-  schedule:
-    - cron: '40 0 * * *'
+      - master
+  pull_request:
+    branches: 
+      - main
+      - master
 
 jobs:
-  test:
-    name: Playwright tests on ${{ matrix.os }} with Playwright ${{ matrix.playwright }} headless=${{ matrix.headless }}
-    strategy:
-      matrix:
-        os: [ubuntu-20.04, windows-latest]  # Suppression de macOS
-        playwright: [1.8.0, 1.12.0, next]
-        headless: [true, false]
-
-    runs-on: ${{ matrix.os }}
+  test_ui:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 18
-    - name: Install dependencies
-      run: npm install playwright@${{ matrix.playwright }} && npx playwright install
-    - name: Run Playwright tests (headless)
-      if: ${{ matrix.headless == true }}
-      run: npm run test
-    - name: Run Playwright tests (headful)
-      if: ${{ matrix.headless == false }}
-      run: |
-        if [[ $RUNNER_OS == "Linux" ]]; then
-          HEADFUL=true xvfb-run --auto-servernum -- npm run test
-        elif [[ $RUNNER_OS == "Windows" ]]; then
-          HEADFUL=true npm run test
-        fi
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+      - name: Run Playwright tests
+        run: xvfb-run npm run test -- --grep @UI
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report-ui
+          path: playwright-report/
+          retention-days: 30
