@@ -1,14 +1,9 @@
-name: Playwright UI Tests
-
+name: Playwright Tests
 on:
   push:
-    branches: 
-      - main
-      - master
+    branches: [main, master]
   pull_request:
-    branches: 
-      - main
-      - master
+    branches: [main, master]
 
 jobs:
   test_ui:
@@ -23,11 +18,15 @@ jobs:
         run: npm ci
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
-      - name: Run Playwright tests
-        run: xvfb-run npm run test -- --grep @UI
+      - name: Check if test files exist
+        run: |
+          echo "Listing files in testCases"
+          ls -la testCases
+      - name: Run Playwright tests (headless)
+        run: npx playwright test --grep @UI
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: playwright-report-ui
-          path: playwright-report/
+          path: test-results
           retention-days: 30
