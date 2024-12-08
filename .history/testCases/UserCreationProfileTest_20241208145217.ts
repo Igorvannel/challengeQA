@@ -9,7 +9,7 @@ test.describe('Tests de soumission avec des informations valides', () => {
     await page.goto('/');
   });
 
-  test('Soumettre un formulaire avec des informations valides et tous les champs optionnels remplis', async ({ page }) => {
+  test('1. Soumettre un formulaire avec des informations valides et tous les champs optionnels remplis', async ({ page }) => {
     await userCreationProfilePage.fillForm('John', 'Doe', 'john.doe@example.com', 'Password123!', 'Password123!');
     await userCreationProfilePage.fillOptionalFields('male', '1990-01-01', '1234567890', '123 rue Principale, Ville, Pays', 'https://linkedin.com/in/johndoe', 'https://github.com/johndoe');
     await userCreationProfilePage.submitForm();
@@ -21,7 +21,7 @@ test.describe('Tests de soumission avec des informations valides', () => {
     });
   });
 
-  test('Soumettre le formulaire avec des informations valides sans remplir les champs optionnels', async ({ page }) => {
+  test('2. Soumettre le formulaire avec des informations valides sans remplir les champs optionnels', async ({ page }) => {
     await userCreationProfilePage.fillForm('John', 'Doe', 'john.doe@example.com', 'Password123!', 'Password123!');
     await userCreationProfilePage.submitForm();
     
@@ -41,8 +41,8 @@ test.describe('Tests de validation des champs', () => {
     await page.goto('/');
   });
 
-  // Validation du champ Prénom (champ obligatoire et lettres uniquement)
-  test('Validation du champ Prénom - Doit afficher une erreur si le champ est vide', async ({ page }) => {
+  // Test 1: Validation du champ Prénom (champ obligatoire et lettres uniquement)
+  test('1. Validation du champ Prénom - Doit afficher une erreur si le champ est vide', async ({ page }) => {
     await userCreationProfilePage.fillForm('', '', '', '', '');
     await userCreationProfilePage.submitForm();
     
@@ -50,7 +50,7 @@ test.describe('Tests de validation des champs', () => {
     expect(isFirstNameErrorDisplayed).toBe(true);
   });
 
-  test('Validation du champ Prénom - Doit afficher une erreur si le prénom contient des chiffres', async ({ page }) => {
+  test('2. Validation du champ Prénom - Doit afficher une erreur si le prénom contient des chiffres', async ({ page }) => {
     await userCreationProfilePage.fillForm('John123', '', '', '', '');
     await userCreationProfilePage.submitForm();
     
@@ -58,8 +58,8 @@ test.describe('Tests de validation des champs', () => {
     expect(isFirstNameErrorDisplayed).toBe(true);
   });
 
-  // Validation du champ Nom (champ obligatoire et lettres uniquement)
-  test('Validation du champ Nom - Doit afficher une erreur si le champ est vide', async ({ page }) => {
+  // Test 2: Validation du champ Nom (champ obligatoire et lettres uniquement)
+  test('3. Validation du champ Nom - Doit afficher une erreur si le champ est vide', async ({ page }) => {
     await userCreationProfilePage.fillForm('', '', '', '', '');
     await userCreationProfilePage.submitForm();
     
@@ -67,7 +67,7 @@ test.describe('Tests de validation des champs', () => {
     expect(isLastNameErrorDisplayed).toBe(true);
   });
 
-  test('Validation du champ Nom - Doit afficher une erreur si le nom contient des chiffres', async ({ page }) => {
+  test('4. Validation du champ Nom - Doit afficher une erreur si le nom contient des chiffres', async ({ page }) => {
     await userCreationProfilePage.fillForm('', 'Smith123@!', '', '', '');
     await userCreationProfilePage.submitForm();
     
@@ -75,8 +75,8 @@ test.describe('Tests de validation des champs', () => {
     expect(isLastNameErrorDisplayed).toBe(true);
   });
 
-  // Validation du champ Email (format valide)
-  test('Validation du champ Email - Doit afficher une erreur si l\'email est vide', async ({ page }) => {
+  // Test 3: Validation du champ Email (format valide)
+  test('5. Validation du champ Email - Doit afficher une erreur si l\'email est vide', async ({ page }) => {
     await userCreationProfilePage.fillForm('', '', '', '', '');
     await userCreationProfilePage.submitForm();
     
@@ -84,7 +84,7 @@ test.describe('Tests de validation des champs', () => {
     expect(isEmailErrorDisplayed).toBe(true);
   });
 
-  test('Validation du champ Email - Doit afficher une erreur si l\'email est invalide (format incorrect)', async ({ page }) => {
+  test('6. Validation du champ Email - Doit afficher une erreur si l\'email est invalide (format incorrect)', async ({ page }) => {
     await userCreationProfilePage.fillForm('', 'john.smith.com', '', '', '');
     await userCreationProfilePage.submitForm();
     
@@ -92,8 +92,8 @@ test.describe('Tests de validation des champs', () => {
     expect(isEmailErrorDisplayed).toBe(true);
   });
 
-  // Validation du champ Mot de passe
-  test('Validation du champ Mot de passe - N\'affiche pas d\'erreur lorsque le mot de passe est faible', async ({ page }) => {
+  // Test 4: Validation du champ Mot de passe
+  test('7. Validation du champ Mot de passe - N\'affiche pas d\'erreur lorsque le mot de passe est faible', async ({ page }) => {
     await userCreationProfilePage.fillForm('', '', '', 'password', 'password');
     await userCreationProfilePage.submitForm();
     
@@ -101,8 +101,8 @@ test.describe('Tests de validation des champs', () => {
     expect(isPasswordErrorDisplayed).toBe(false);
   });
 
-  // Validation du champ Confirmation du mot de passe (doit correspondre)
-  test('Validation du champ Confirmation du mot de passe - Doit afficher une erreur si les mots de passe ne correspondent pas', async ({ page }) => {
+  // Test 5: Validation du champ Confirmation du mot de passe (doit correspondre)
+  test('8. Validation du champ Confirmation du mot de passe - Doit afficher une erreur si les mots de passe ne correspondent pas', async ({ page }) => {
     await userCreationProfilePage.fillForm('', '', '', 'Password123!', 'DifferentPassword!');
     await userCreationProfilePage.submitForm();
     
@@ -119,7 +119,7 @@ test.describe('Tests des champs optionnels', () => {
     await page.goto('/');
   });
 
-  test('Validation du champ Genre - Doit afficher une erreur si le genre est invalide', async ({ page }) => {
+  test('9. Validation du champ Genre - Doit afficher une erreur si le genre est invalide', async ({ page }) => {
     const genders = ['male', 'female', 'prefer not to say'];
     for (const gender of genders) {
       await userCreationProfilePage.fillOptionalFields(gender, '', '', '', '', '');
@@ -129,7 +129,15 @@ test.describe('Tests des champs optionnels', () => {
     }
   });
 
-  test('Validation du champ Numéro de téléphone - Doit afficher une erreur si le numéro est invalide', async ({ page }) => {
+  test('10. Validation du champ Date de naissance - Doit échouer pour un format de date invalide', async ({ page }) => {
+    await userCreationProfilePage.fillOptionalFields('', '2024-02-30', '', '', '', '');
+    await userCreationProfilePage.submitForm();
+    
+    const isDobErrorDisplayed = await userCreationProfilePage.checkForError('dob');
+    expect(isDobErrorDisplayed).toBe(false);
+  });
+
+  test('11. Validation du champ Numéro de téléphone - Doit afficher une erreur si le numéro est invalide', async ({ page }) => {
     await userCreationProfilePage.fillOptionalFields('', '', '12345abcde', '', '', '');
     await userCreationProfilePage.submitForm();
     
@@ -137,7 +145,7 @@ test.describe('Tests des champs optionnels', () => {
     expect(isPhoneErrorDisplayed).toBe(true);
   });
 
-  test('Validation du champ Adresse - N\'affiche pas d\'erreur pour une adresse invalide', async ({ page }) => {
+  test('12. Validation du champ Adresse - N\'affiche pas d\'erreur pour une adresse invalide', async ({ page }) => {
     await userCreationProfilePage.fillOptionalFields('', '', '', '123 Main St!', '', '');
     await userCreationProfilePage.submitForm();
     
@@ -145,7 +153,7 @@ test.describe('Tests des champs optionnels', () => {
     expect(isAddressErrorDisplayed).toBe(false);
   });
 
-  test('Validation du champ LinkedIn URL - N\'affiche pas d\'erreur pour un format d\'URL invalide', async ({ page }) => {
+  test('13. Validation du champ LinkedIn URL - N\'affiche pas d\'erreur pour un format d\'URL invalide', async ({ page }) => {
     await userCreationProfilePage.fillOptionalFields('', '', '', '', 'linkedin.com/johnsmith', '');
     await userCreationProfilePage.submitForm();
     
@@ -153,7 +161,7 @@ test.describe('Tests des champs optionnels', () => {
     expect(isLinkedinErrorDisplayed).toBe(false);
   });
 
-  test('Validation du champ GitHub URL - Doit afficher une erreur pour un format d\'URL invalide', async ({ page }) => {
+  test('14. Validation du champ GitHub URL - Doit afficher une erreur pour un format d\'URL invalide', async ({ page }) => {
     await userCreationProfilePage.fillOptionalFields('', '', '', '', '', 'github.com/johnsmith');
     await userCreationProfilePage.submitForm();
     
@@ -170,7 +178,7 @@ test.describe('Tests de soumission du formulaire', () => {
     await page.goto('/');
   });
 
-  test('Soumettre le formulaire avec des données obligatoires manquantes - Doit afficher des erreurs pour les champs manquants', async ({ page }) => {
+  test('15. Soumettre le formulaire avec des données obligatoires manquantes - Doit afficher des erreurs pour les champs manquants', async ({ page }) => {
     await userCreationProfilePage.fillForm('', '', '', '', '');
     await userCreationProfilePage.submitForm();
     
@@ -178,7 +186,7 @@ test.describe('Tests de soumission du formulaire', () => {
     expect(isFirstNameErrorDisplayed).toBe(true);
   });
 
-  test('Soumettre le formulaire avec des données invalides - Doit afficher des erreurs pour les champs invalides', async ({ page }) => {
+  test('16. Soumettre le formulaire avec des données invalides - Doit afficher des erreurs pour les champs invalides', async ({ page }) => {
     await userCreationProfilePage.fillForm('John123', 'Smith123', 'john.smith.com', 'password', 'password');
     await userCreationProfilePage.submitForm();
     

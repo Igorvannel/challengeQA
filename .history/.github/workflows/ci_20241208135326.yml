@@ -24,11 +24,7 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - name: Run Playwright tests
-<<<<<<< HEAD
-        run: xvfb-run npm run test  
-=======
         run: xvfb-run npm run test -- --grep @UI
->>>>>>> f804f84 (playwright test and GitActions Configuration)
       - uses: actions/upload-artifact@v4
         if: always()
         with:
