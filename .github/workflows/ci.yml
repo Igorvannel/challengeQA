@@ -25,6 +25,8 @@ jobs:
         run: npx playwright install --with-deps
       - name: Run Playwright tests
         run: xvfb-run npm run test
+      - name: Publish Test Summary Results
+        run: npx github-actions-ctrf ctrf/ctrf-report.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
